@@ -13,32 +13,18 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        System.out.println("Lag et nytt passord");
-        String inputString = input.nextLine().toLowerCase();
+        boolean repeatOrNot = false;
 
-        int numberOfDigitsReq = 3;
-        PasswordValidation isValidPassword = validatePassword(inputString, 10, numberOfDigitsReq);
+        while (!repeatOrNot) {
 
-        switch(isValidPassword) {
+            System.out.println("Lag et nytt passord");
+            String inputString = input.nextLine().toLowerCase();
 
-            case password_too_short:
-                System.out.println("Passord for kort");
-                break;
-
-            case password_not_just_letters_or_digits:
-                System.out.println("Passordet kan kun innholde tall eller bokstaver");
-                break;
-
-            case password_too_few_digits:
-                System.out.println("Det må være minst " + numberOfDigitsReq + " tall i passordet ditt.");
-                break;
-
-            case password_all_ok:
-                System.out.println("Godkjent passord");
-                break;
+            int numberOfDigitsReq = 3;
+            PasswordValidation isValidPassword = validatePassword(inputString, 10, numberOfDigitsReq);
+            repeatOrNot = userFeedback(isValidPassword, numberOfDigitsReq);
 
         }
-
     }
 
     public static PasswordValidation validatePassword(String userInput, int numberOfChars, int reqNumberOfDigits) {
@@ -60,7 +46,6 @@ public class Main {
             if (!Character.isLetterOrDigit(charFromString)) {
                 return PasswordValidation.password_not_just_letters_or_digits;
             }
-
         }
 
         if (!(numberOfDigits >= reqNumberOfDigits)) {
@@ -68,6 +53,31 @@ public class Main {
         }
 
         return PasswordValidation.password_all_ok;
+
+    }
+
+    public static boolean userFeedback(PasswordValidation isValid, int digitsReq) {
+
+        switch (isValid) {
+
+            case password_too_short:
+                System.out.println("Passord for kort");
+                return false;
+
+            case password_not_just_letters_or_digits:
+                System.out.println("Passordet kan kun innholde tall eller bokstaver");
+                return false;
+
+            case password_too_few_digits:
+                System.out.println("Det må være minst " + digitsReq + " tall i passordet ditt.");
+                return false;
+
+            case password_all_ok:
+                System.out.println("Godkjent passord");
+                return true;
+
+        }
+        return false;
 
     }
 
